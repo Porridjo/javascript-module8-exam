@@ -1,0 +1,27 @@
+@baseUrl = http://localhost:3000
+
+### Create a place
+POST {{baseUrl}}/places
+Content-Type: application/json
+
+{
+    "name":"Brussels",
+    "description":"always rainy"
+}
+### Create a user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":"David",
+    "email":"salut@gmail.com"
+}
+
+### Like a place
+PATCH {{baseUrl}}/auths/favorite
+Content-Type: application/json
+
+{
+    "userId": "0950d04a-c85e-416e-a4d1-5323bca97283",
+    "placeId": "75dfea72-8ed0-477b-9f0d-9d85dad7cab4"
+}
