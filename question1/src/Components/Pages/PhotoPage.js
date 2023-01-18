@@ -2,13 +2,16 @@ import places from '../../utils/places';
 
 import { clearPage } from '../../utils/render';
 
-let photoIndex = 2;
+let photoIndex;
 
 const PhotoPage = () => {
   clearPage();
+
+  photoIndex = 2;
+
   renderPhotoPage();
 
-  renderPhotoImage(places[photoIndex].image);
+  renderAllPhotos();
 
   renderEventListener();
 };
@@ -21,9 +24,7 @@ function renderPhotoPage() {
     <div class="photos">
 
     </div>
-    <div class="nom-photo my-3">
-      ${places[photoIndex].name}
-    </div>
+    <p class="nom-photo my-3">${places[photoIndex].name}</p>
     <div>
       <button type="button" class="btn btn-secondary me-3 prev-btn">Previous</button>
       <button type="button" class="btn btn-dark ms-3 next-btn">Next</button>
@@ -39,30 +40,62 @@ function renderEventListener() {
 
   buttonPrev.addEventListener('click', () => {
     if (photoIndex > 0) {
-      const photo = document.querySelector('.photos');
+      const photo = document.querySelector('.current-photo');
+      const previousPhoto = photo.previousSibling;
+      photo.classList.add('d-none');
+      photo.classList.remove('current-photo', 'd-block');
+      previousPhoto.classList.remove('d-none')
+      previousPhoto.classList.add('d-block', 'current-photo');
+
+      photoIndex -=1;
+      const nom = document.querySelector('.nom-photo');
+      nom.textContent = `${places[photoIndex].name}`;
+
+     /*  const photos = document.querySelector('.photos');
       const nom = document.querySelector('.nom-photo');
       photoIndex -= 1;
       photo.innerHTML = '';
       renderPhotoImage(places[photoIndex].image);
-      nom.innerHTML = `${places[photoIndex].name}`;
+      nom.textContent = `${places[photoIndex].name}`; */
     }
   });
 
   buttonNext.addEventListener('click', () => {
     if (photoIndex < places.length - 1) {
-      const photo = document.querySelector('.photos');
+      const photo = document.querySelector('.current-photo');
+      const nextPhoto = photo.nextSibling;
+      photo.classList.add('d-none');
+      photo.classList.remove('current-photo', 'd-block');
+      nextPhoto.classList.remove('d-none')
+      nextPhoto.classList.add('d-block', 'current-photo');
+
+      photoIndex +=1;
+      const nom = document.querySelector('.nom-photo');
+      nom.textContent = `${places[photoIndex].name}`;
+
+      /* const photo = document.querySelector('.photos');
       const nom = document.querySelector('.nom-photo');
       photoIndex += 1;
       photo.innerHTML = '';
       renderPhotoImage(places[photoIndex].image);
-      nom.innerHTML = `${places[photoIndex].name}`;
+      nom.textContent = `${places[photoIndex].name}`; */
     }
   });
 }
 
-function renderPhotoImage(url) {
+function renderAllPhotos() {
+  places.forEach((place, i) => {
+    renderPhotoImage(place.image, i);
+  })
+}
+
+function renderPhotoImage(url, i) {
   const image = new Image();
-  image.class = 'photo';
+  if (i===2) {
+    image.className = 'photo current-photo d-block';
+  } else {
+    image.className = 'photo d-none';
+  }
   image.src = url;
   image.height = 500;
   const photos = document.querySelector('.photos');

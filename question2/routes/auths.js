@@ -20,8 +20,12 @@ router.post('/register', (req, res) => {
 
 // add to favorites
 router.patch('/favorite', (req, res) => {
-  const userId = req?.body?.userId;
-  const placeId = req?.body?.placeId;
+  const userId = req?.body?.userId?.trim()?.length !== 0 ? req.body.userId : undefined;
+  const placeId = req?.body?.placeId?.trim()?.length !== 0 ? req.body.placeId : undefined;
+
+  if (!userId || !placeId) {
+    return res.sendStatus(400);
+  }
 
   let alreadyHasInFavorite = false;
 
@@ -29,7 +33,7 @@ router.patch('/favorite', (req, res) => {
   const user = findUserById(userId);
 
   if (!place || !user) {
-    return res.sendStatus(400);
+    return res.sendStatus(404);
   }
 
   user.favorites.forEach((favoritePlace) => {
